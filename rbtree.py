@@ -17,7 +17,7 @@ class Node:
 
 
 class RBTree:
-    """A Red-Black-Tree"""
+    """Красно-черное дерево"""
 
     def __init__(self, *args):
         self.root = None
@@ -30,7 +30,7 @@ class RBTree:
                 raise TypeError(str(args[0]) + " is not iterable")
 
     def get_node(self, key, *args):
-        """Returns a node by key. Second optional param is a node to start searching from"""
+        """Возвращает узел по ключу."""
 
         if len(args) == 0:
             start = self.root
@@ -47,7 +47,7 @@ class RBTree:
             return self.get_node(key, start.left)
 
     def get_path(self, node):
-        """Returns a path-list of keys from root to taken node"""
+        """Обходит дерево"""
 
         curr = node
         lst = [curr.key]
@@ -58,7 +58,6 @@ class RBTree:
         return reversed(lst)
 
     def insert(self, key, *args):
-        """Insert a node with key"""
 
         if not isinstance(key, int):
             raise TypeError(str(key) + " is not an int")
@@ -90,31 +89,16 @@ class RBTree:
                         self.insert(key, parent.left)
 
     def _insert_case_one(self, child):
-        """
-        if child is at the root, recolors it black,
-        else goes into the second case
-        """
         if not child.parent:
             self.root.color = 'k'
         else:
             self._insert_case_two(child)
 
     def _insert_case_two(self, child):
-        """
-        If child's parent is black - ok,
-        else goes into the third case
-        """
         if child.parent.color == 'r':
             self._insert_case_three(child)
 
     def _insert_case_three(self, child):
-        """
-        If child's parent and uncle are red, recolors the parent and the uncle black
-        and child's grandpa red
-        Then start with the first case on grandpa to validate the tree (grandgrandpa may be also red)
-        Otherwise goes into the fourth case
-        """
-
         parent = child.parent
         grand_node = parent.parent
 
@@ -132,12 +116,6 @@ class RBTree:
             self._insert_case_four(child)
 
     def _insert_case_four(self, child):
-        """
-        If child's parent is red and child's uncle is black
-        and parent is a left child of the grandpa,
-        the child is the right child of the parent or vice versa
-        makes tree rotations around parent and goes into the fifth child
-        """
         parent = child.parent
         grand_node = parent.parent
         if grand_node.left == parent:
@@ -155,12 +133,6 @@ class RBTree:
         self._insert_case_five(child)
 
     def _insert_case_five(self, child):
-        """
-        If child's parent is red and uncle is black and the parent
-        is the left child of the grandpa and the child is the left child of the parent,
-        or vice versa
-        makes tree rotations around the grandpa
-        """
         parent = child.parent
         grand_node = parent.parent
         if grand_node.left == parent:
@@ -178,9 +150,6 @@ class RBTree:
             self._rotate_left(grand_node)
 
     def _rotate_left(self, pivot):
-        """
-        left tree rotations around pivot
-        """
         old_root = pivot
         parent = old_root.parent
 
@@ -205,9 +174,6 @@ class RBTree:
                 new_root.parent = parent
 
     def _rotate_right(self, pivot):
-        """
-        right tree rotation around pivot
-        """
         if not pivot.left:
             pass
         else:
@@ -234,28 +200,6 @@ class RBTree:
                 elif parent.left and parent.left.key == old_root.key:
                     parent.left = new_root
                     new_root.parent = parent
-
-    # def get_element_count(self, *args):
-    #     """
-    #     Counts the number of elements in a tree
-    #     """
-    #     if len(args) == 0:
-    #         node = self.root
-    #     else:
-    #         node = args[0]
-    #
-    #     left = 0
-    #     right = 0
-    #
-    #     if node:
-    #         if node.left:
-    #             left = self.get_element_count(node.left)
-    #         if node.right:
-    #             right = self.get_element_count(node.right)
-    #
-    #         return 1 + left + right
-    #     else:
-    #         return 0
 
     def delete(self, key):
         node = self.get_node(key, self.root)
@@ -585,7 +529,9 @@ class RBTree:
             self._rotate_right(par_node)
 
 class TreeDrawer:
-
+    """
+    Класс создающий красно-черное дерево
+    """
     def __init__(self):
         self.tree = RBTree()
         self.figure = Figure()

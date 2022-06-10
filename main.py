@@ -48,7 +48,6 @@ class Window(QtWidgets.QDialog):
 
         tree_mng_groupbox.setLayout(tree_mng_layout)
 
-        # import/export group
         io_groupbox = QtWidgets.QGroupBox("Взаимодействие с базой данных")
         io_layout = QtWidgets.QHBoxLayout()
 
