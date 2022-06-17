@@ -5,7 +5,6 @@ from DB_RBT import DataBase
 from rbtree import RBTree, TreeDrawer
 
 
-
 class Facade:
     """
     Класс шаблона проектирования
@@ -22,9 +21,7 @@ class Facade:
     def save_data(self):
         path = [str(x.key) for x in self.drawer._preorder(self.drawer.tree)]
         if path != None:
-            ##path.pop(0)
-            print(path)
-            self.DB.save_tree(path)
+            self.DB.save_tree(float(path))
             logging.log(logging.INFO, ' данные добавлены в бд')
         else:
             logging.log(logging.INFO, ' нет несохраненных данных')
@@ -33,8 +30,7 @@ class Facade:
         """
         Запись элементов из БД в структуру дерева
         """
-        elems = self.DB.get_from_db()
-        print(elems)
-        if elems != []:
-            for a in elems:
+        keys = self.DB.get_keys_db()
+        if keys != []:
+            for a in keys:
                 self.drawer.insert(int(a[0]))

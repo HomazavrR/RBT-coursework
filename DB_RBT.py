@@ -19,28 +19,28 @@ class DataBase:
         self.db.commit()
         sql.close()
 
-    def get_from_db(self):
+    def get_keys_db(self):
         """
-        Возвращает значения из БД в переменной elems
+        Возвращает значения из БД в переменной keys
         """
         sql = self.db.cursor()
-        elems = [value for value in sql.execute(f"SELECT * FROM RB_tree")]
-        if not elems:
+        keys = [value for value in sql.execute(f"SELECT * FROM RB_tree")]
+        if not keys:
             logging.log(logging.INFO, ' БД пуста')
         sql.close()
-        return elems
+        return keys
 
-    def del_all(self):
+    def clear_bd(self):
         """
-        Удаляет все данные в базе данных.
+        Удаляет все данные в БД
         """
         cur = self.db.cursor()
         cur.execute("DELETE from RB_tree")
         self.db.commit()
 
-    def db_insert(self, key):
+    def ins_db(self, key):
         """
-        Функция для вставки данных в базу данных
+        Функция для вставки данных в БД
         """
         cur = self.db.cursor()
         cur.execute("INSERT INTO RB_tree VALUES (?)", (key))
@@ -51,6 +51,6 @@ class DataBase:
         """
         Переписывает новые данные в БД поверх старых
         """
-        self.del_all()
+        self.clear_bd()
         for val in path:
-            self.db_insert(val[0])
+            self.ins_db(val[0])

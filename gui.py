@@ -1,5 +1,6 @@
 import sys
 import time
+import pickle
 from facade import Facade
 from PyQt5 import QtWidgets
 
@@ -24,7 +25,7 @@ class Window(QtWidgets.QDialog):
 
     def _init_ui(self, canvas):
         self.setWindowTitle('Красно-черное дерево поиска | Терещенко Карина, ИСП-31-19')
-        # Управление деревом
+        # Загружается основное окно, назначаются действия кнопкам
         tree_mng_groupbox = QtWidgets.QGroupBox("Управление")
         tree_mng_layout = QtWidgets.QHBoxLayout()
 
@@ -74,9 +75,11 @@ class Window(QtWidgets.QDialog):
         self._center()
 
     def _init_tree_drawer(self):
+        ## Инициирует отрисовку дерева
         self.tree_drawer = facade.drawer
 
     def _add_btn_handler(self):
+        ## Добавляет обработчик кнопки "Добавить"
         if len(self.key_input.text()) == 0:
             return
         try:
@@ -87,6 +90,7 @@ class Window(QtWidgets.QDialog):
             self._show_error('Неверный тип данных', 'Введите натуральное число!')
 
     def _remove_btn_handler(self):
+        ## Добавляет обработчик кнопки "Удалить"
         if len(self.key_input.text()) == 0:
             return
         try:
@@ -97,6 +101,7 @@ class Window(QtWidgets.QDialog):
             self._show_error('Неверный тип данных', 'Введите натуральное число!')
 
     def _search_btn_handler(self):
+        ## Добавляет обработчик кнопки "Поиск"
         if len(self.key_input.text()) == 0:
             return
 
@@ -112,6 +117,7 @@ class Window(QtWidgets.QDialog):
             self._show_error('Неверный тип данных', 'Введите натуральное число!')
 
     def _export_btn_handler(self):
+        ## Добавляет обработчик кнопки "Сохранить"
         fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Export RBTree', 'mytree.rbtree',
                                                       'Red-Black Tree files (*.rbtree)')[0]
         if fname:
@@ -119,6 +125,7 @@ class Window(QtWidgets.QDialog):
                 pickle.dump(self.tree_drawer.tree, f)
 
     def _import_btn_handler(self):
+        ## Добавляет обработчик кнопки "Загрузить"
         fname = QtWidgets.QFileDialog.getOpenFileName(self, 'Import RBTree', '',
                                                       'Red-Black Tree files (*.rbtree)')[0]
         if fname:
@@ -127,6 +134,7 @@ class Window(QtWidgets.QDialog):
             self.tree_drawer.plot()
 
     def _show_error(self, title, message):
+        ## Создает модальное окно с ошибкой
         msg = QtWidgets.QMessageBox()
         msg.setIcon(QtWidgets.QMessageBox.Critical)
         msg.setWindowTitle(title)

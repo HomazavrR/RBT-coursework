@@ -1,5 +1,4 @@
 import collections
-import pickle
 import networkx as nx
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -58,7 +57,7 @@ class RBTree:
         return reversed(lst)
 
     def insert(self, key, *args):
-
+        """Вставка узла"""
         if not isinstance(key, int):
             raise TypeError(str(key) + " is not an int")
         else:
@@ -202,6 +201,7 @@ class RBTree:
                     new_root.parent = parent
 
     def delete(self, key):
+        """Удаление ключа"""
         node = self.get_node(key, self.root)
         if node:
             if node == self.root:
@@ -217,6 +217,7 @@ class RBTree:
                 self._delete_node(node)
 
     def _delete_node(self, node):
+        """Удаление узла"""
         if self.get_height(node.left) > self.get_height(node.right):
             to_switch = self.get_max(node.left)
             self._switch_nodes(node, to_switch)
@@ -239,6 +240,7 @@ class RBTree:
                 self._delete_leaf_parent(to_delete)
 
     def get_height(self, *args):
+        """Плолучаем высоту дерева"""
         if len(args) == 0:
             node = self.root
         else:
@@ -250,6 +252,7 @@ class RBTree:
             return 1 + max(self.get_height(node.left), self.get_height(node.right))
 
     def get_max(self, *args):
+        """Получаем узел с максимальным значением"""
         if len(args) == 0:
             node = self.root
         else:
@@ -261,6 +264,7 @@ class RBTree:
             return self.get_max(node.right)
 
     def get_min(self, *args):
+        """Получаем узел с минимальным значением"""
         if len(args) == 0:
             node = self.root
         else:
@@ -530,7 +534,7 @@ class RBTree:
 
 class TreeDrawer:
     """
-    Класс создающий красно-черное дерево
+    Класс создающий и расчитывающий красно-черное дерево
     """
     def __init__(self):
         self.tree = RBTree()
@@ -540,20 +544,24 @@ class TreeDrawer:
         pass
 
     def insert(self, key):
+        """Вставка узла в главное окно"""
         self.tree.insert(key)
         self.plot()
 
     def remove(self, key):
+        """Удаление узла из главного окна"""
         self.tree.delete(key)
         self.plot()
 
     def search(self, key):
+        """Поиск узла"""
         node = self.tree.get_node(key)
         if node:
             node_path = self.tree.get_path(node)
             self.plot(self._color_search_path(node_path))
 
     def plot(self, search_colors=None):
+        """Расчет отрисовки дерева"""
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         ax.clear()
@@ -594,6 +602,7 @@ class TreeDrawer:
         self.canvas.draw()
 
     def _color_search_path(self, path):
+        """Отрисовка пути поиска"""
         nodes = [x.key for x in self._preorder(self.tree)]
         colors = self._get_color_list(self.tree)
         for p in path:
